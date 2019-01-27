@@ -1,6 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 
+
+const ShowCountries = (props) => {
+  const listLength = props.list.length
+  if (listLength === 1) {
+    return (
+      <Country country={props.list[0]} forecast={props.forecast} />
+    )
+  }
+  return (
+    listLength > 10 ? <div>too many countries</div>
+      : props.list.map(country =>
+        <li key={country.name}>
+          {country.name} <button onClick={() => props.handleClick(country.name)}>
+            show
+          </button>
+        </li>)
+  )
+}
+
+const Country = (props) => {
+  const country = props.country
+  return (
+    <div>
+      <h1>{country.name}</h1>
+      <p>capital {country.capital}</p>
+      <p>population {country.population}</p>
+      <h2>languages</h2>
+      {country.languages.map(language => <li key={language}>{language}</li>)}
+      <img src={country.flag} alt="flag" width="300" height="200" />
+
+      <h2>Weather in {country.capital}</h2>
+      <p>temperature: {props.forecast.temp}</p>
+      <img src={props.forecast.icon} alt="weather" />
+      <p>Wind: {props.forecast.wind}</p>
+    </div>
+  )
+}
+
 const App = () => {
   const [countries, setCountries] = useState([])
   const [filteredCountries, setFilteredCountries] = useState([])
@@ -60,47 +98,10 @@ const App = () => {
     getWeather(filteredList)
   }
 
-  const ShowCountries = (props) => {
-    const listLength = props.list.length
-    if (listLength === 1) {
-      return (
-        <Country country={filteredCountries[0]} />
-      )
-    }
-    return (
-      listLength > 10 ? <div>too many countries</div>
-        : props.list.map(country =>
-          <li key={country.name}>
-            {country.name} <button onClick={() => handleClick(country.name)}>
-              show
-            </button>
-          </li>)
-    )
-  }
-
-  const Country = (props) => {
-    const country = props.country
-    return (
-      <div>
-        <h1>{country.name}</h1>
-        <p>capital {country.capital}</p>
-        <p>population {country.population}</p>
-        <h2>languages</h2>
-        {country.languages.map(language => <li key={language}>{language}</li>)}
-        <img src={country.flag} alt="flag" width="300" height="200" />
-
-        <h2>Weather in {country.capital}</h2>
-        <p>temperature: {forecast.temp}</p>
-        <img src={forecast.icon} alt="weather" />
-        <p>Wind: {forecast.wind}</p>
-      </div>
-    )
-  }
-
   return (
     <div>
       find countries<input value={filter} onChange={handleChange} />
-      <ShowCountries list={filteredCountries} />
+      <ShowCountries list={filteredCountries} forecast={forecast} handleClick={handleClick} />
     </div>
   )
 }

@@ -1,12 +1,19 @@
 import React from 'react'
+import Person from '../components/Person'
 
 const Persons = (props) => {
   return (
-    <ul>
-      {props.filter ? props.filteredList
-        .map((e) => <li key={e.name}>{e.name} {e.number}</li>) :
-        props.persons.map((e) => <li key={e.name}>{e.name} {e.number}</li>)}
-    </ul>
+    <table>
+      <tbody>
+        {props.filteredList
+          .map(e =>
+            <Person key={e.id}
+              person={e}
+              handleDelete={props.handleDelete} />
+          )}
+      </tbody>
+    </table>
+
   )
 }
 

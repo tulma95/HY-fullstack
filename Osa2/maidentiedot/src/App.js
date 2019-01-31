@@ -10,7 +10,8 @@ const ShowCountries = (props) => {
     )
   }
   return (
-    listLength > 10 ? <div>too many countries</div>
+    listLength > 10
+      ? <div>too many countries</div>
       : props.list.map(country =>
         <li key={country.name}>
           {country.name} <button onClick={() => props.handleClick(country.name)}>

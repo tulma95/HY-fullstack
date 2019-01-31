@@ -12,8 +12,7 @@ const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [filter, setFilter] = useState('')
-  const [filteredList, setFilteredList] = useState([])
+  const [search, setSearch] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
 
@@ -22,7 +21,6 @@ const App = () => {
       .getAll()
       .then(initialPersons => {
         setPersons(initialPersons)
-        setFilteredList(initialPersons)
       })
   }, [])
 
@@ -50,7 +48,6 @@ const App = () => {
       personService.create(personObject)
         .then(newPerson => {
           setPersons(persons.concat(newPerson))
-          setFilteredList(persons.concat(newPerson))
           setNewName('')
           setNewNumber('')
           setNotificationMessage(`Lisättiin ${newPerson.name}`)
@@ -74,10 +71,7 @@ const App = () => {
 
   const handleFilterChange = (event) => {
     const value = event.target.value
-    setFilter(value)
-    const filteredList = persons
-      .filter(person => person.name.toLowerCase().includes(value.toLowerCase()))
-    setFilteredList(filteredList)
+    setSearch(value)
   }
 
   const handleDelete = (id) => {
@@ -85,7 +79,6 @@ const App = () => {
       .then(() => {
         const newList = persons.filter(person => person.id !== id)
         setPersons(newList)
-        setFilteredList(newList)
         setNotificationMessage(`Henkilö poistettu onnistuneesti`)
       })
       .catch(error => {
@@ -104,14 +97,13 @@ const App = () => {
       <ErrorNotification message={errorMessage} />
 
       <h2>Puhelinluettelo</h2>
-      <Filter filter={filter} onChange={handleFilterChange} />
+      <Filter filter={search} onChange={handleFilterChange} />
       <h3>Lisää uusi</h3>
       <PersonForm addPerson={addPerson}
         newName={newName} handleNameChange={handleNameChange}
         newNumber={newNumber} handleNumberChange={handleNumberChange} />
       <h3>Numerot</h3>
-      <Persons filter={filter}
-        filteredList={filteredList}
+      <Persons filter={search}
         persons={persons}
         handleDelete={handleDelete} />
     </div>

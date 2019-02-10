@@ -39,6 +39,9 @@ const App = () => {
           .then(returnedPerson => {
             setPersons(persons
               .map(person => person.id !== updatedPerson.id ? person : returnedPerson))
+
+            setNewName('')
+            setNewNumber('')
             setNotificationMessage(`${returnedPerson.name}n numero vaihdettu`)
           }).catch(error => {
             setErrorMessage('Numeron vaihto epäonnistui')
@@ -52,7 +55,8 @@ const App = () => {
           setNewNumber('')
           setNotificationMessage(`Lisättiin ${newPerson.name}`)
         }).catch(error => {
-          setErrorMessage('Henkilön luonti epäonnistui')
+          console.log(error.response.data);
+          setErrorMessage(error.response.data.error)
         })
     }
     setTimeout(() => {

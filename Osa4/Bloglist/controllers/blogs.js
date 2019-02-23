@@ -17,7 +17,7 @@ blogsRouter.post('/', async(request, response, next) => {
 
   try {
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if (!token || !decodedToken.id) {
+    if (!request.token || !decodedToken.id) {
       return response.status(401).json({
         error: 'token missing or invalid'
       })
@@ -45,15 +45,18 @@ blogsRouter.post('/', async(request, response, next) => {
 blogsRouter.delete('/:id', async(request, response, next) => {
   const id = request.params.id
   const token = jwt.verify(request.token, process.env.SECRET)
-
+  console.log(token);
   try {
+
     const blog = await Blog.findById(id)
 
     if (blog.user.toString() === token.id) {
       await Blog.findByIdAndRemove(blog.id)
       response.status(204).end()
     } else {
-      response.status(401).json({ error: 'not authorized' })
+      response.status(401).json({
+        error: 'not authorized'
+      })
     }
 
   } catch (error) {

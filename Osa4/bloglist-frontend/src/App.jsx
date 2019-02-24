@@ -4,6 +4,8 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import CreateNewBlog from './components/CreateNewBlog'
 import './app.css'
+import LoginForm from './components/LoginForm';
+import Togglable from './components/Togglable';
 
 
 
@@ -14,11 +16,11 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [notification, setNotification] = useState(null)
 
-
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
+    blogService.getAll()
+      .then(blogs => {
+        setBlogs(blogs)
+      })
   }, [])
 
   useEffect(() => {
@@ -59,46 +61,51 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogUser')
   }
 
-  const loginForm = () => (
-    <div>
-      <h2>log in to application</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          käyttäjätunnus
-          <input type='text'
-            value={username}
-            name='username'
-            onChange={({ target }) => setUsername(target.value)} />
-        </div>
-        <div>
-          salasana
-          <input type='text'
-            value={password}
-            name='password'
-            onChange={({ target }) => setPassword(target.value)} />
-        </div>
-        <button type='submit'>kirjaudu</button>
-      </form>
-    </div>
-  )
+  const blogsList = () => {
+    return (
+      <div>
+        <p>{user.name} logged in</p>
+        <button onClick={handleLogout}>logout</button>
 
-  const blogsList = () => (
-    <div>
-      <h2>blogs</h2>
+        <Togglable buttonLabel='new blog'>
+          <CreateNewBlog
+            blogs={blogs}
+            setBlogs={setBlogs}
+            blogService={blogService}
+          />
+        </Togglable >
 
-      <p>{user.name} logged in</p>
-      <p><button onClick={handleLogout}>logout</button></p>
-      <CreateNewBlog blogs={blogs} setBlogs={setBlogs} blogService={blogService} />
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
-    </div>
-  )
+        {blogs
+          .sort((b1, b2) => b2.likes - b1.likes)
+          .map(blog =>
+            <Blog key={blog.id}
+              blog={blog}
+              blogService={blogService}
+              blogs={blogs}
+              setBlogs={setBlogs}
+              user={user}
+            />)
+        }
+      </div>
+    )
+  }
 
   return (
     <div>
       {notification && <p className='notification'>{notification} </p>}
-      {user === null ? loginForm() : blogsList()}
+
+      <h1>Blogs</h1>
+
+      {user === null ?
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleSubmit={handleLogin} />
+        :
+        blogsList()
+      }
     </div>
   )
 }

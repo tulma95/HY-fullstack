@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
@@ -7,15 +6,17 @@ import CreateNewBlog from './components/CreateNewBlog'
 import './app.css'
 import LoginForm from './components/LoginForm';
 import Togglable from './components/Togglable';
+import { useField } from './hooks'
 
 
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [password, setPassword] = useState('')
-  const [username, setUsername] = useState('')
   const [notification, setNotification] = useState(null)
+
+  const username = useField('text')
+  const password = useField('password')
 
   useEffect(() => {
     blogService.getAll()
@@ -37,7 +38,8 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService.login({
-        username, password
+        username: username.value,
+        password: password.value
       })
 
       window.localStorage.setItem(
@@ -46,12 +48,11 @@ const App = () => {
 
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
       setNotification(`${user.name} logged in`)
     } catch (error) {
       setNotification(`failed to log in`)
     }
+
     setTimeout(() => {
       setNotification(null)
     }, 2000);
@@ -101,8 +102,6 @@ const App = () => {
         <LoginForm
           username={username}
           password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
           handleSubmit={handleLogin} />
         :
         blogsList()

@@ -46,8 +46,6 @@ const Blog = ({ blog, blogService, blogs, setBlogs, user }) => {
       {user.id === blog.user.id && <button onClick={handleRemove}>remove</button>}
     </div>
   )
-
-
   return (
     <div style={blogStyle}>
       <div >

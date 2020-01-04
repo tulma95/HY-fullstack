@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { addBlog, removeBlog, updateLikes } from '../reducers/blogsReducer'
+import { addBlog, removeBlog, updateLikes, updateComments } from '../reducers/blogsReducer'
 
 
 const Blog = (props) => {
@@ -10,6 +10,19 @@ const Blog = (props) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
+  }
+
+  const [comment, setComment] = useState('')
+  const onChange = (e) => {
+    setComment(e.target.value)
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    props.blog.comments = [...props.blog.comments, comment]
+    await props.blogService.addComment(props.blog.id, comment)
+    props.updateComments(props.blog)
+    setComment('')
   }
 
   if (props.blog === undefined) {
@@ -38,6 +51,17 @@ const Blog = (props) => {
         <div>{`${props.blog.likes} likes`} <button onClick={handleLikeClick}>like</button></div>
         <div>{`added by ${props.blog.user.name}`}</div>
         {props.user.username === props.blog.user.username && <button onClick={handleRemove}>remove</button>}
+
+        <form action="">
+          <input type="text" value={comment} onChange={onChange} />
+          <button type="submit" onClick={handleSubmit}>add comment</button>
+        </form>
+
+
+        {props.blog.comments.map((comment, i) => (
+          <div key={i}>{comment}</div>
+        ))}
+
       </div>
     </div>
   )
@@ -51,7 +75,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  addBlog, removeBlog, updateLikes
+  addBlog, removeBlog, updateLikes, updateComments
 }
 
 const ConnectedBlog = connect(mapStateToProps,

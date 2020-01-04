@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, fireEvent } from 'react-testing-library'
-import SimpleBlog from './SimpleBlog';
+import SimpleBlog from './SimpleBlog'
 
 
 test('renders content', () => {

@@ -1,12 +1,12 @@
 import React from 'react'
 import {
   Link
-} from "react-router-dom";
+} from 'react-router-dom'
 
 
 const Users = ({ users }) => {
   return (
-    <table style={{ textAlign: "left" }}>
+    <table style={{ textAlign: 'left' }}>
       <tbody>
         <tr>
           <th></th>

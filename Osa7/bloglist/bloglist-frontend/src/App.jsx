@@ -7,8 +7,8 @@ import UserInfo from './components/UserInfo'
 import CreateNewBlog from './components/CreateNewBlog'
 import Users from './components/Users'
 import './app.css'
-import LoginForm from './components/LoginForm';
-import Togglable from './components/Togglable';
+import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import { useField } from './hooks'
 import { createNotification } from './reducers/notificationReducer'
@@ -17,7 +17,7 @@ import { connect } from 'react-redux'
 import {
   Route,
   Link
-} from "react-router-dom";
+} from 'react-router-dom'
 
 
 
@@ -66,12 +66,12 @@ const App = (props) => {
       props.createNotification(`${user.name} logged in`)
 
     } catch (error) {
-      props.createNotification(`failed to log in`)
+      props.createNotification('failed to log in')
     }
 
     setTimeout(() => {
       props.createNotification(null)
-    }, 2000);
+    }, 2000)
   }
 
   const handleLogout = () => {
@@ -93,7 +93,7 @@ const App = (props) => {
         {props.blogs
           .sort((b1, b2) => b2.likes - b1.likes)
           .map(blog => (
-            <div key={blog.id} style={{ border: "solid 1px", padding: "5px" }}>
+            <div key={blog.id} style={{ border: 'solid 1px', padding: '5px' }}>
               <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
             </div>
           ))}
@@ -139,7 +139,7 @@ const App = (props) => {
 
 const NavBar = ({ user, handleLogout }) => {
   return (
-    <div style={{ backgroundColor: "lightgrey", padding: "5px" }}>
+    <div style={{ backgroundColor: 'lightgrey', padding: '5px' }}>
       <Link to='/'><button>Home</button></Link>
       <Link to='/users'><button>Users</button></Link>
       {user ?

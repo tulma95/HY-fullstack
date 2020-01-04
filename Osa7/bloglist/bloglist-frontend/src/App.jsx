@@ -79,18 +79,8 @@ const App = (props) => {
     window.localStorage.removeItem('loggedBlogUser')
   }
 
-  const LoggedUser = () => {
-    return (
-      <div>
-        <p>{user.name} logged in</p>
-        <button onClick={handleLogout}>logout</button>
-        <Link to='/users'><button>Users</button></Link>
-        <Link to='/'><button>Home</button></Link>
-      </div>
-    )
-  }
 
-  const BlogsList = () => {
+  const BlogsList = ({ user, blogService }) => {
     return (
       <div>
         <Togglable buttonLabel='new blog'>
@@ -113,6 +103,7 @@ const App = (props) => {
 
   return (
     <div>
+      <NavBar user={user} handleLogout={handleLogout} />
       <Notification />
       <h1>Blogs</h1>
 
@@ -123,9 +114,8 @@ const App = (props) => {
           handleSubmit={handleLogin} />
         :
         <div>
-          <LoggedUser user={user} />
           <Route exact path='/'>
-            <BlogsList />
+            <BlogsList user={user} blogService={blogService} />
           </Route>
 
           <Route exact path='/users'>
@@ -143,6 +133,20 @@ const App = (props) => {
 
         </div>
       }
+    </div>
+  )
+}
+
+const NavBar = ({ user, handleLogout }) => {
+  return (
+    <div style={{ backgroundColor: "lightgrey", padding: "5px" }}>
+      <Link to='/'><button>Home</button></Link>
+      <Link to='/users'><button>Users</button></Link>
+      {user ?
+        <span>
+          {user.name} logged in <button onClick={() => handleLogout()}>logout</button>
+        </span>
+        : <span>log in</span>}
     </div>
   )
 }

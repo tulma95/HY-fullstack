@@ -5,6 +5,9 @@ import blogsReducer from './reducers/blogsReducer'
 import notificationReducer from './reducers/notificationReducer'
 import { createStore, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
+import {
+  BrowserRouter as Router,
+} from "react-router-dom";
 
 const reducer = combineReducers({
   notification: notificationReducer,
@@ -16,7 +19,9 @@ const store = createStore(reducer)
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router >
+      <App />
+    </Router>
   </Provider>,
   document.getElementById('root')
 )

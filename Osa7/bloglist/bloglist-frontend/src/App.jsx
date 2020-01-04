@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import userService from './services/users'
+import UserInfo from './components/UserInfo'
 import CreateNewBlog from './components/CreateNewBlog'
+import Users from './components/Users'
 import './app.css'
 import LoginForm from './components/LoginForm';
 import Togglable from './components/Togglable';
@@ -11,12 +14,16 @@ import { useField } from './hooks'
 import { createNotification } from './reducers/notificationReducer'
 import { addBlog } from './reducers/blogsReducer'
 import { connect } from 'react-redux'
-
+import {
+  Route,
+  Link
+} from "react-router-dom";
 
 
 
 const App = (props) => {
   const [user, setUser] = useState(null)
+  const [users, setUsers] = useState([])
 
   const username = useField('text')
   const password = useField('password')
@@ -26,8 +33,13 @@ const App = (props) => {
       .then(blogs => {
         props.addBlog(blogs)
       })
-  }, [])
 
+    userService.getAll()
+      .then(users => {
+        setUsers(users)
+      })
+
+  }, [])
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
     if (loggedUserJSON) {
@@ -67,13 +79,20 @@ const App = (props) => {
     window.localStorage.removeItem('loggedBlogUser')
   }
 
-  const blogsList = () => {
+  const LoggedUser = () => {
     return (
       <div>
-
         <p>{user.name} logged in</p>
         <button onClick={handleLogout}>logout</button>
+        <Link to='/users'><button>Users</button></Link>
+        <Link to='/'><button>Home</button></Link>
+      </div>
+    )
+  }
 
+  const BlogsList = () => {
+    return (
+      <div>
         <Togglable buttonLabel='new blog'>
           <CreateNewBlog
             blogService={blogService}
@@ -83,13 +102,11 @@ const App = (props) => {
 
         {props.blogs
           .sort((b1, b2) => b2.likes - b1.likes)
-          .map(blog =>
-            <Blog key={blog.id}
-              blog={blog}
-              blogService={blogService}
-              user={user}
-            />)
-        }
+          .map(blog => (
+            <div key={blog.id} style={{ border: "solid 1px", padding: "5px" }}>
+              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+            </div>
+          ))}
       </div>
     )
   }
@@ -105,7 +122,26 @@ const App = (props) => {
           password={password}
           handleSubmit={handleLogin} />
         :
-        blogsList()
+        <div>
+          <LoggedUser user={user} />
+          <Route exact path='/'>
+            <BlogsList />
+          </Route>
+
+          <Route exact path='/users'>
+            <Users users={users} />
+          </Route>
+
+          <Route exact path='/users/:id' render={({ match }) =>
+            <UserInfo user={users.find(user => user.id === match.params.id)} />
+          } />
+
+          <Route exact path='/blogs/:id' render={({ match }) =>
+            <Blog blog={props.blogs.find(blog => blog.id === match.params.id)}
+              blogService={blogService} user={user} />
+          } />
+
+        </div>
       }
     </div>
   )

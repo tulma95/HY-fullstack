@@ -12,13 +12,10 @@ const Blog = (props) => {
     marginBottom: 5
   }
 
-  console.log(props.blog);
-
-  const [showAll, setShowAll] = useState(false)
-
-  const toggleShowAll = () => {
-    setShowAll(!showAll)
+  if (props.blog === undefined) {
+    return <div>loading</div>
   }
+
 
   const handleLikeClick = async () => {
     props.blog.likes++
@@ -33,25 +30,14 @@ const Blog = (props) => {
     }
   }
 
-  const title = (
-    <div onClick={toggleShowAll}>
-      {props.blog.title} {props.blog.author}
-    </div>
-  )
-
-  const all = (
-    < div >
-      <div onClick={toggleShowAll}>{props.blog.title} {props.blog.author}</div>
-      <div>{props.blog.url}</div>
-      <div>{`${props.blog.likes} likes`} <button onClick={handleLikeClick}>like</button></div>
-      <div>{`added by ${props.blog.user.name}`}</div>
-      {props.user.username === props.blog.user.username && <button onClick={handleRemove}>remove</button>}
-    </div >
-  )
   return (
     <div style={blogStyle}>
       <div >
-        {showAll ? all : title}
+        <h2>{props.blog.title} by {props.blog.author}</h2>
+        <div>{props.blog.url}</div>
+        <div>{`${props.blog.likes} likes`} <button onClick={handleLikeClick}>like</button></div>
+        <div>{`added by ${props.blog.user.name}`}</div>
+        {props.user.username === props.blog.user.username && <button onClick={handleRemove}>remove</button>}
       </div>
     </div>
   )

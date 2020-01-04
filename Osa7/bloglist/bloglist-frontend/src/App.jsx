@@ -6,14 +6,17 @@ import CreateNewBlog from './components/CreateNewBlog'
 import './app.css'
 import LoginForm from './components/LoginForm';
 import Togglable from './components/Togglable';
+import Notification from './components/Notification'
 import { useField } from './hooks'
+import { createNotification } from './reducers/notificationReducer'
+import { addBlog } from './reducers/blogsReducer'
+import { connect } from 'react-redux'
 
 
 
-const App = () => {
-  const [blogs, setBlogs] = useState([])
+
+const App = (props) => {
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
 
   const username = useField('text')
   const password = useField('password')
@@ -21,7 +24,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll()
       .then(blogs => {
-        setBlogs(blogs)
+        props.addBlog(blogs)
       })
   }, [])
 
@@ -48,13 +51,14 @@ const App = () => {
 
       blogService.setToken(user.token)
       setUser(user)
-      setNotification(`${user.name} logged in`)
+      props.createNotification(`${user.name} logged in`)
+
     } catch (error) {
-      setNotification(`failed to log in`)
+      props.createNotification(`failed to log in`)
     }
 
     setTimeout(() => {
-      setNotification(null)
+      props.createNotification(null)
     }, 2000);
   }
 
@@ -66,25 +70,23 @@ const App = () => {
   const blogsList = () => {
     return (
       <div>
+
         <p>{user.name} logged in</p>
         <button onClick={handleLogout}>logout</button>
 
         <Togglable buttonLabel='new blog'>
           <CreateNewBlog
-            blogs={blogs}
-            setBlogs={setBlogs}
             blogService={blogService}
+            user={user}
           />
         </Togglable >
 
-        {blogs
+        {props.blogs
           .sort((b1, b2) => b2.likes - b1.likes)
           .map(blog =>
             <Blog key={blog.id}
               blog={blog}
               blogService={blogService}
-              blogs={blogs}
-              setBlogs={setBlogs}
               user={user}
             />)
         }
@@ -94,8 +96,7 @@ const App = () => {
 
   return (
     <div>
-      {notification && <p className='notification'>{notification} </p>}
-
+      <Notification />
       <h1>Blogs</h1>
 
       {user === null ?
@@ -110,4 +111,20 @@ const App = () => {
   )
 }
 
-export default App
+const mapStateToProps = (state) => {
+  return {
+    blogs: state.blogs,
+    notification: state.notification
+  }
+}
+
+const mapDispatchToProps = {
+  createNotification,
+  addBlog
+}
+
+const ConnectedApp = connect(mapStateToProps,
+  mapDispatchToProps
+)(App)
+
+export default ConnectedApp

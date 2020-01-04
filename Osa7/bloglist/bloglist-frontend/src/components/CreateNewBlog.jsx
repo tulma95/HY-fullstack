@@ -1,6 +1,9 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
+import { addBlog } from '../reducers/blogsReducer'
 
-const CreateNewBlog = ({ blogs, setBlogs, blogService}) => {
+
+const CreateNewBlog = (props) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -15,8 +18,9 @@ const CreateNewBlog = ({ blogs, setBlogs, blogService}) => {
     }
 
     try {
-      const savedBlog = await blogService.create(newBlog)
-      setBlogs(blogs.concat(savedBlog))
+      const savedBlog = await props.blogService.create(newBlog)
+      savedBlog.user = props.user
+      props.addBlog(savedBlog)
       setTitle('')
       setAuthor('')
       setUrl('')
@@ -52,4 +56,15 @@ const CreateNewBlog = ({ blogs, setBlogs, blogService}) => {
   )
 }
 
-export default CreateNewBlog
+
+const mapDispatchToProps = {
+  addBlog
+}
+
+const ConnectedCreateNewBlog = connect(null,
+  mapDispatchToProps
+)(CreateNewBlog)
+
+
+
+export default ConnectedCreateNewBlog

@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
+import { connect } from 'react-redux'
+import { addBlog, removeBlog, updateLikes } from '../reducers/blogsReducer'
 
-const Blog = ({ blog, blogService, blogs, setBlogs, user }) => {
+
+const Blog = (props) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -9,6 +12,8 @@ const Blog = ({ blog, blogService, blogs, setBlogs, user }) => {
     marginBottom: 5
   }
 
+  console.log(props.blog);
+
   const [showAll, setShowAll] = useState(false)
 
   const toggleShowAll = () => {
@@ -16,35 +21,32 @@ const Blog = ({ blog, blogService, blogs, setBlogs, user }) => {
   }
 
   const handleLikeClick = async () => {
-    blog.likes++
-    await blogService.update(blog)
-
-    setBlogs(
-      blogs.map(b => b.id === blog.id ? blog : b)
-    )
+    props.blog.likes++
+    await props.blogService.update(props.blog)
+    props.updateLikes(props.blog)
   }
 
   const handleRemove = async () => {
-    if (window.confirm(`remove blog ${blog.title}`)) {
-      await blogService.remove(blog)
-      setBlogs(blogs.filter(b => b.id !== blog.id))
+    if (window.confirm(`remove blog ${props.blog.title}`)) {
+      await props.blogService.remove(props.blog)
+      props.removeBlog(props.blog)
     }
   }
 
   const title = (
     <div onClick={toggleShowAll}>
-      {blog.title} {blog.author}
+      {props.blog.title} {props.blog.author}
     </div>
   )
 
   const all = (
-    <div>
-      <div onClick={toggleShowAll}>{blog.title} {blog.author}</div>
-      <div>{blog.url}</div>
-      <div>{`${blog.likes} likes`} <button onClick={handleLikeClick}>like</button></div>
-      <div>{`added by ${blog.user.username}`}</div>
-      {user.id === blog.user.id && <button onClick={handleRemove}>remove</button>}
-    </div>
+    < div >
+      <div onClick={toggleShowAll}>{props.blog.title} {props.blog.author}</div>
+      <div>{props.blog.url}</div>
+      <div>{`${props.blog.likes} likes`} <button onClick={handleLikeClick}>like</button></div>
+      <div>{`added by ${props.blog.user.name}`}</div>
+      {props.user.username === props.blog.user.username && <button onClick={handleRemove}>remove</button>}
+    </div >
   )
   return (
     <div style={blogStyle}>
@@ -54,4 +56,20 @@ const Blog = ({ blog, blogService, blogs, setBlogs, user }) => {
     </div>
   )
 }
-export default Blog
+
+
+const mapStateToProps = (state) => {
+  return {
+    blogs: state.blogs
+  }
+}
+
+const mapDispatchToProps = {
+  addBlog, removeBlog, updateLikes
+}
+
+const ConnectedBlog = connect(mapStateToProps,
+  mapDispatchToProps
+)(Blog)
+
+export default ConnectedBlog

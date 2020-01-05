@@ -13,8 +13,8 @@ const LoginForm = ({
 }) => {
 
   return (
-    <div class="ui form">
-      <h2 class="ui header">log in to application</h2>
+    <div className="ui form">
+      <h2 className="ui header">log in to application</h2>
       <form onSubmit={handleSubmit}>
         <div>
           Username
@@ -24,7 +24,7 @@ const LoginForm = ({
           Password
           <Input {...password} />
         </div>
-        <button class="ui button" type='submit'>Login</button>
+        <button className="ui button" type='submit'>Login</button>
       </form>
     </div>
   )

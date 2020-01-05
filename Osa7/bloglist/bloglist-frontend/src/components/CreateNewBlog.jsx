@@ -26,7 +26,7 @@ const CreateNewBlog = (props) => {
       setAuthor('')
       setUrl('')
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
@@ -35,19 +35,19 @@ const CreateNewBlog = (props) => {
       <Form onSubmit={handleNewBlogSubmit}>
         <Form.Field>
           <label>Title</label>
-          <input type="text"
+          <input id='title' type="text"
             value={title}
             onChange={({ target }) => setTitle(target.value)} />
         </Form.Field>
         <Form.Field>
           <label>Author</label>
-          <input type="text"
+          <input id='author' type="text"
             value={author}
             onChange={({ target }) => setAuthor(target.value)} />
         </Form.Field>
         <Form.Field>
           <label>url</label>
-          <input type="text"
+          <input id='url' type="text"
             value={url}
             onChange={({ target }) => setUrl(target.value)} />
         </Form.Field>

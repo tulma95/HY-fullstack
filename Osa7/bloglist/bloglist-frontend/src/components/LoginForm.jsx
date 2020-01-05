@@ -2,7 +2,7 @@ import React from 'react'
 
 const Input = (props) => {
   return (
-    <input type={props.type}
+    <input id={props.id} type={props.type}
       value={props.value}
       onChange={props.onChange} />
   )
@@ -18,11 +18,11 @@ const LoginForm = ({
       <form onSubmit={handleSubmit}>
         <div>
           Username
-          <Input {...username} />
+          <Input id='username'{...username} />
         </div>
         <div>
           Password
-          <Input {...password} />
+          <Input id='password' {...password} />
         </div>
         <button className="ui button" type='submit'>Login</button>
       </form>

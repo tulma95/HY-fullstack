@@ -103,7 +103,7 @@ const App = (props) => {
               <Link to={`/blogs/${blog.id}`}>
                 {blog.title}
               </Link>
-              <div class="ui divider"></div>
+              <div className="ui divider"></div>
             </div>
           ))}
       </div>

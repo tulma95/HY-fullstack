@@ -57,7 +57,7 @@ const Blog = (props) => {
 
           <div className="field">
             <label>New comment</label>
-            <input type="text" value={comment} onChange={onChange} />
+            <input id='comment' type="text" value={comment} onChange={onChange} />
           </div>
           <button className="ui button" type="submit">add comment</button>
         </form>

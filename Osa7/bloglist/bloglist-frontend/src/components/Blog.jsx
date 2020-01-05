@@ -4,13 +4,6 @@ import { addBlog, removeBlog, updateLikes, updateComments } from '../reducers/bl
 
 
 const Blog = (props) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
 
   const [comment, setComment] = useState('')
   const onChange = (e) => {
@@ -44,22 +37,34 @@ const Blog = (props) => {
   }
 
   return (
-    <div style={blogStyle}>
-      <div >
+    <div className="ui card">
+      <div className="content">
         <h2>{props.blog.title} by {props.blog.author}</h2>
-        <div>{props.blog.url}</div>
-        <div>{`${props.blog.likes} likes`} <button onClick={handleLikeClick}>like</button></div>
-        <div>{`added by ${props.blog.user.name}`}</div>
-        {props.user.username === props.blog.user.username && <button onClick={handleRemove}>remove</button>}
+        <div className="header">{props.blog.url}</div>
 
-        <form action="">
-          <input type="text" value={comment} onChange={onChange} />
-          <button type="submit" onClick={handleSubmit}>add comment</button>
+        <div className="ui right labeled button" role="button" tabIndex="0">
+          <button className="ui red button" onClick={handleLikeClick}>
+            <i aria-hidden="true" className="heart icon"></i>
+            like
+          </button>
+          <a className="ui red left pointing basic label">{`${props.blog.likes} likes`}</a>
+        </div>
+
+        <div>{`added by ${props.blog.user.name}`}</div>
+        {props.user.username === props.blog.user.username && <button className="ui button" onClick={handleRemove}>remove</button>}
+
+        <form onSubmit={handleSubmit} className="ui form">
+
+          <div className="field">
+            <label>New comment</label>
+            <input type="text" value={comment} onChange={onChange} />
+          </div>
+          <button className="ui button" type="submit">add comment</button>
         </form>
 
 
         {props.blog.comments.map((comment, i) => (
-          <div key={i}>{comment}</div>
+          <div key={i} className="ui comments">{comment}</div>
         ))}
 
       </div>

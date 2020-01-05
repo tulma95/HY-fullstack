@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { addBlog } from '../reducers/blogsReducer'
+import { Button, Checkbox, Form } from 'semantic-ui-react'
 
 
 const CreateNewBlog = (props) => {
@@ -31,27 +32,27 @@ const CreateNewBlog = (props) => {
 
   return (
     <div>
-      <form onSubmit={handleNewBlogSubmit}>
-        <div>
-          title:
+      <Form onSubmit={handleNewBlogSubmit}>
+        <Form.Field>
+          <label>Title</label>
           <input type="text"
             value={title}
             onChange={({ target }) => setTitle(target.value)} />
-        </div>
-        <div>
-          author:
+        </Form.Field>
+        <Form.Field>
+          <label>Author</label>
           <input type="text"
             value={author}
             onChange={({ target }) => setAuthor(target.value)} />
-        </div>
-        <div>
-          url:
+        </Form.Field>
+        <Form.Field>
+          <label>url</label>
           <input type="text"
             value={url}
             onChange={({ target }) => setUrl(target.value)} />
-        </div>
-        <button>create</button>
-      </form>
+        </Form.Field>
+        <Button>create</Button>
+      </Form>
     </div>
   )
 }

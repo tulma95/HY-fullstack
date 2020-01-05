@@ -13,18 +13,18 @@ const LoginForm = ({
 }) => {
 
   return (
-    <div>
-      <h2>log in to application</h2>
+    <div class="ui form">
+      <h2 class="ui header">log in to application</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          käyttäjätunnus
+          Username
           <Input {...username} />
         </div>
         <div>
-          salasana
+          Password
           <Input {...password} />
         </div>
-        <button type='submit'>kirjaudu</button>
+        <button class="ui button" type='submit'>Login</button>
       </form>
     </div>
   )

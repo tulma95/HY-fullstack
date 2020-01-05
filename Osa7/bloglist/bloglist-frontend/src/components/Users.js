@@ -1,4 +1,5 @@
 import React from 'react'
+import { Header, Table } from 'semantic-ui-react'
 import {
   Link
 } from 'react-router-dom'
@@ -6,22 +7,25 @@ import {
 
 const Users = ({ users }) => {
   return (
-    <table style={{ textAlign: 'left' }}>
+    <Table basic='very' celled collapsing>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>User</Table.HeaderCell>
+          <Table.HeaderCell>Blogs created</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+
       <tbody>
-        <tr>
-          <th></th>
-          <th>Blogs created</th>
-        </tr>
         {users.map(user => (
-          <tr key={user.name}>
-            <th>
+          <Table.Row key={user.name}>
+            <Table.Cell>
               <Link to={`/users/${user.id}`}>{user.name}</Link>
-            </th>
-            <th>{user.blogs.length}</th>
-          </tr>
+            </Table.Cell>
+            <Table.Cell>{user.blogs.length}</Table.Cell>
+          </Table.Row>
         ))}
       </tbody>
-    </table>
+    </Table>
   )
 }
 

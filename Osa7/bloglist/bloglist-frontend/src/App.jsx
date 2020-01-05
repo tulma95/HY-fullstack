@@ -14,6 +14,7 @@ import { useField } from './hooks'
 import { createNotification } from './reducers/notificationReducer'
 import { addBlog } from './reducers/blogsReducer'
 import { connect } from 'react-redux'
+import { Container, Header, Divider, Button } from 'semantic-ui-react'
 import {
   Route,
   Link
@@ -89,12 +90,20 @@ const App = (props) => {
             user={user}
           />
         </Togglable >
+        <Divider horizontal>
+          <Header as='h4'>
+            Bloglist
+          </Header>
+        </Divider>
 
         {props.blogs
           .sort((b1, b2) => b2.likes - b1.likes)
           .map(blog => (
-            <div key={blog.id} style={{ border: 'solid 1px', padding: '5px' }}>
-              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+            <div key={blog.id} >
+              <Link to={`/blogs/${blog.id}`}>
+                {blog.title}
+              </Link>
+              <div class="ui divider"></div>
             </div>
           ))}
       </div>
@@ -102,49 +111,51 @@ const App = (props) => {
   }
 
   return (
-    <div>
-      <NavBar user={user} handleLogout={handleLogout} />
-      <Notification />
-      <h1>Blogs</h1>
+    <Container>
+      <div>
+        <NavBar user={user} handleLogout={handleLogout} />
+        <Notification />
+        <h1>Blogs</h1>
 
-      {user === null ?
-        <LoginForm
-          username={username}
-          password={password}
-          handleSubmit={handleLogin} />
-        :
-        <div>
-          <Route exact path='/'>
-            <BlogsList user={user} blogService={blogService} />
-          </Route>
+        {user === null ?
+          <LoginForm
+            username={username}
+            password={password}
+            handleSubmit={handleLogin} />
+          :
+          <div>
+            <Route exact path='/'>
+              <BlogsList user={user} blogService={blogService} />
+            </Route>
 
-          <Route exact path='/users'>
-            <Users users={users} />
-          </Route>
+            <Route exact path='/users'>
+              <Users users={users} />
+            </Route>
 
-          <Route exact path='/users/:id' render={({ match }) =>
-            <UserInfo user={users.find(user => user.id === match.params.id)} />
-          } />
+            <Route exact path='/users/:id' render={({ match }) =>
+              <UserInfo user={users.find(user => user.id === match.params.id)} />
+            } />
 
-          <Route exact path='/blogs/:id' render={({ match }) =>
-            <Blog blog={props.blogs.find(blog => blog.id === match.params.id)}
-              blogService={blogService} user={user} />
-          } />
+            <Route exact path='/blogs/:id' render={({ match }) =>
+              <Blog blog={props.blogs.find(blog => blog.id === match.params.id)}
+                blogService={blogService} user={user} />
+            } />
 
-        </div>
-      }
-    </div>
+          </div>
+        }
+      </div>
+    </Container>
   )
 }
 
 const NavBar = ({ user, handleLogout }) => {
   return (
     <div style={{ backgroundColor: 'lightgrey', padding: '5px' }}>
-      <Link to='/'><button>Home</button></Link>
-      <Link to='/users'><button>Users</button></Link>
+      <Link to='/'><Button>Home</Button></Link>
+      <Link to='/users'><Button>Users</Button></Link>
       {user ?
         <span>
-          {user.name} logged in <button onClick={() => handleLogout()}>logout</button>
+          {user.name} logged in <Button onClick={() => handleLogout()}>logout</Button>
         </span>
         : <span>log in</span>}
     </div>

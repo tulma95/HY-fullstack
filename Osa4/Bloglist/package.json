@@ -23,7 +23,7 @@
   "devDependencies": {
     "cross-env": "^5.2.0",
     "jest": "^24.1.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "nodemon": "^1.18.10",
     "supertest": "^3.4.2"
   },
